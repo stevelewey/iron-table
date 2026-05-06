@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apply — The Iron Table | Proverbs &amp; Kings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Cinzel:wght@400;500&family=Source+Sans+3:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  /* ── Brand Tokens ─────────────────────────────────────────── */
+  :root {
+    --navy:       #1A1410;
+    --gold:       #C9A84C;
+    --gold-light: #DFC078;
+    --cream:      #FAF6EF;
+    --warm-mid:   #EDE5D4;
+    --text:       #2E2820;
+    --muted:      #7A6E62;
+    --rule:       rgba(201,168,76,0.35);
+    --error:      #9B3A2A;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background-color: var(--cream);
+    color: var(--text);
+    font-family: 'Source Sans 3', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* grain overlay */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 999; opacity: 0.6;
+  }
+
+  /* ── Utilities ────────────────────────────────────────────── */
+  .rule {
+    display: block; width: 60px; height: 1px;
+    background: var(--gold);
+    margin: 0 auto 2rem;
+  }
+
+  .eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    color: var(--gold);
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  /* ── Header / Nav ─────────────────────────────────────────── */
+  .site-nav {
+    background: var(--navy);
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-brand {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .nav-back {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: rgba(250,246,239,0.4);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-back:hover { color: var(--gold); }
+  .nav-back::before { content: '← '; }
+
+  /* ── Hero ─────────────────────────────────────────────────── */
+  .hero {
+    background: var(--navy);
+    color: var(--cream);
+    text-align: center;
+    padding: 4.5rem 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -40%; left: 50%;
+    transform: translateX(-50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(ellipse, rgba(201,168,76,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+    opacity: 0;
+    animation: fadeUp 0.7s ease 0.2s forwards;
+  }
+
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.4rem, 5.5vw, 4rem);
+    font-weight: 500;
+    line-height: 1.1;
+    color: var(--cream);
+    letter-spacing: 0.02em;
+    margin-bottom: 1rem;
+    opacity: 0;
+    animation: fadeUp 0.7s ease 0.35s forwards;
+  }
+
+  .hero h1 em { color: var(--gold); font-style: italic; }
+
+  .hero-sub {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 1rem;
+    color: rgba(250,246,239,0.55);
+    max-width: 480px;
+    margin: 0 auto;
+    line-height: 1.65;
+    opacity: 0;
+    animation: fadeUp 0.7s ease 0.5s forwards;
+  }
+
+  /* ── Intro band ───────────────────────────────────────────── */
+  .intro-band {
+    max-width: 660px;
+    margin: 0 auto;
+    padding: 3.5rem 2rem 2rem;
+    text-align: center;
+  }
+
+  .intro-band h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+    font-weight: 500;
+    color: var(--navy);
+    line-height: 1.25;
+    margin-bottom: 1rem;
+  }
+
+  .intro-band h2 em { color: var(--gold); font-style: italic; }
+
+  .intro-band p {
+    font-size: 1rem;
+    color: var(--muted);
+    max-width: 540px;
+    margin: 0 auto 1rem;
+    line-height: 1.75;
+  }
+
+  /* ── Progress indicator ───────────────────────────────────── */
+  .progress-wrap {
+    max-width: 580px;
+    margin: 0 auto 0;
+    padding: 0 2rem 2rem;
+  }
+
+  .progress-steps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+  }
+
+  .step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    flex: 1;
+    position: relative;
+  }
+
+  .step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 14px;
+    left: 50%;
+    width: 100%;
+    height: 1px;
+    background: rgba(201,168,76,0.25);
+    z-index: 0;
+  }
+
+  .step-dot {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(201,168,76,0.3);
+    background: var(--cream);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    color: var(--muted);
+    position: relative; z-index: 1;
+    transition: all 0.3s ease;
+  }
+
+  .step.active .step-dot {
+    background: var(--navy);
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  .step.done .step-dot {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--navy);
+    font-size: 0.75rem;
+  }
+
+  .step-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+    text-align: center;
+    line-height: 1.3;
+  }
+
+  .step.active .step-label { color: var(--navy); }
+
+  /* ── Form container ───────────────────────────────────────── */
+  .form-container {
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 0 2rem 5rem;
+  }
+
+  /* ── Section cards ────────────────────────────────────────── */
+  .form-section {
+    background: white;
+    border: 1px solid rgba(201,168,76,0.15);
+    border-top: 3px solid var(--gold);
+    padding: 2rem 2rem 1.5rem;
+    margin-bottom: 1.5rem;
+    display: none;
+    animation: fadeUp 0.4s ease forwards;
+  }
+
+  .form-section.active { display: block; }
+
+  .section-header {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(201,168,76,0.15);
+  }
+
+  .section-number {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: var(--navy);
+    line-height: 1.2;
+  }
+
+  .section-desc {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-top: 0.35rem;
+    line-height: 1.55;
+  }
+
+  /* ── Fields ───────────────────────────────────────────────── */
+  .field-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  @media (max-width: 480px) { .field-group { grid-template-columns: 1fr; } }
+
+  .field {
+    margin-bottom: 1.2rem;
+  }
+
+  .field label {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+
+  .field label .req {
+    color: var(--gold);
+    margin-left: 2px;
+  }
+
+  .field input,
+  .field select,
+  .field textarea {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid rgba(26,20,16,0.12);
+    border-radius: 0;
+    background: var(--cream);
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.97rem;
+    font-weight: 300;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s ease, background 0.2s ease;
+    -webkit-appearance: none;
+  }
+
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus {
+    border-color: var(--gold);
+    background: white;
+  }
+
+  .field input.error,
+  .field select.error,
+  .field textarea.error {
+    border-color: var(--error);
+  }
+
+  .field-error {
+    font-size: 0.8rem;
+    color: var(--error);
+    margin-top: 0.3rem;
+    display: none;
+  }
+
+  .field textarea {
+    resize: vertical;
+    min-height: 90px;
+    line-height: 1.6;
+  }
+
+  .field textarea.tall { min-height: 120px; }
+
+  .field select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C9A84C' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 2.5rem;
+    cursor: pointer;
+  }
+
+  .field-hint {
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-top: 0.3rem;
+    line-height: 1.45;
+    font-style: italic;
+  }
+
+  /* ── Radio / Checkbox group ───────────────────────────────── */
+  .radio-group, .check-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0.2rem;
+  }
+
+  .radio-option, .check-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.7rem 0.9rem;
+    border: 1px solid rgba(26,20,16,0.1);
+    background: var(--cream);
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .radio-option:hover, .check-option:hover {
+    border-color: var(--gold);
+    background: white;
+  }
+
+  .radio-option input, .check-option input {
+    width: auto;
+    min-width: 16px;
+    height: 16px;
+    margin-top: 3px;
+    accent-color: var(--gold);
+    cursor: pointer;
+    flex-shrink: 0;
+    padding: 0;
+    border: none;
+    background: none;
+  }
+
+  .radio-option span, .check-option span {
+    font-size: 0.95rem;
+    font-weight: 300;
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  /* ── Navigation buttons ───────────────────────────────────── */
+  .form-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(201,168,76,0.15);
+  }
+
+  .btn-next, .btn-submit {
+    padding: 0.85rem 2rem;
+    background: var(--navy);
+    color: var(--cream);
+    border: none;
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .btn-next:hover, .btn-submit:hover {
+    background: var(--gold);
+    color: var(--navy);
+  }
+
+  .btn-back {
+    padding: 0.85rem 1.5rem;
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid rgba(26,20,16,0.12);
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .btn-back:hover {
+    border-color: var(--navy);
+    color: var(--navy);
+  }
+
+  .btn-back-hidden { visibility: hidden; }
+
+  /* ── Confirmation page ────────────────────────────────────── */
+  .confirm-page {
+    display: none;
+    max-width: 580px;
+    margin: 0 auto;
+    padding: 5rem 2rem;
+    text-align: center;
+  }
+
+  .confirm-icon {
+    width: 64px; height: 64px;
+    border: 1.5px solid var(--gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 2rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    color: var(--gold);
+    font-style: italic;
+  }
+
+  .confirm-page h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.4rem;
+    font-weight: 500;
+    color: var(--navy);
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+
+  .confirm-page h2 em { color: var(--gold); font-style: italic; }
+
+  .confirm-page p {
+    font-size: 1rem;
+    color: var(--muted);
+    max-width: 420px;
+    margin: 0 auto 1rem;
+    line-height: 1.75;
+  }
+
+  .confirm-verse {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--navy);
+    max-width: 380px;
+    margin: 2rem auto 0.3rem;
+    line-height: 1.6;
+  }
+
+  .confirm-ref {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+  }
+
+  /* ── Footer ───────────────────────────────────────────────── */
+  footer {
+    background: var(--navy);
+    padding: 2rem;
+    text-align: center;
+  }
+
+  footer p {
+    font-size: 0.82rem;
+    color: rgba(250,246,239,0.35);
+    margin: 0;
+  }
+
+  footer a { color: var(--gold); text-decoration: none; }
+
+  /* ── Animations ───────────────────────────────────────────── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── Nav ───────────────────────────────────────────────────── -->
+<nav class="site-nav">
+  <a href="#" class="nav-brand">Proverbs &amp; Kings</a>
+  <a href="iron_table_waitlist.html" class="nav-back">The Iron Table</a>
+</nav>
+
+<!-- ── Hero ──────────────────────────────────────────────────── -->
+<section class="hero">
+  <p class="hero-eyebrow">The Iron Table</p>
+  <h1>Application for<br><em>Membership</em></h1>
+  <p class="hero-sub">This form takes about 8–10 minutes. Steve reviews every application personally and responds within 3–5 business days.</p>
+</section>
+
+<!-- ── Intro ──────────────────────────────────────────────────── -->
+<div class="intro-band">
+  <h2>Before You Begin</h2>
+  <span class="rule"></span>
+  <p>There are no trick questions here. The purpose of this form is simple: to start a real conversation. Answer honestly — the table works best when the right people are in it, and the right people get in by being themselves.</p>
+  <p>If Steve believes there is a fit, you will hear from him directly. If the timing or the table composition isn't right, he will tell you that too.</p>
+</div>
+
+<!-- ── Progress ───────────────────────────────────────────────── -->
+<div class="progress-wrap">
+  <div class="progress-steps" id="progress-steps">
+    <div class="step active" data-step="1">
+      <div class="step-dot">1</div>
+      <span class="step-label">About<br>You</span>
+    </div>
+    <div class="step" data-step="2">
+      <div class="step-dot">2</div>
+      <span class="step-label">Your<br>Work</span>
+    </div>
+    <div class="step" data-step="3">
+      <div class="step-dot">3</div>
+      <span class="step-label">Challenges &amp;<br>Contribution</span>
+    </div>
+    <div class="step" data-step="4">
+      <div class="step-dot">4</div>
+      <span class="step-label">Faith &amp;<br>Fit</span>
+    </div>
+    <div class="step" data-step="5">
+      <div class="step-dot">5</div>
+      <span class="step-label">Availability &amp;<br>Commitment</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     FORM
+══════════════════════════════════════════════════════════ -->
+<div class="form-container" id="form-container">
+<form id="application-form" novalidate>
+
+  <!-- ── SECTION 1: About You ─────────────────────────────── -->
+  <div class="form-section active" id="section-1">
+    <div class="section-header">
+      <span class="section-number">Section 01 of 05</span>
+      <div class="section-title">About You</div>
+      <p class="section-desc">The basics. This is where we start.</p>
+    </div>
+
+    <div class="field-group">
+      <div class="field">
+        <label>First Name <span class="req">*</span></label>
+        <input type="text" name="first_name" id="first_name" placeholder="First name" required>
+        <span class="field-error">Please enter your first name.</span>
+      </div>
+      <div class="field">
+        <label>Last Name <span class="req">*</span></label>
+        <input type="text" name="last_name" id="last_name" placeholder="Last name" required>
+        <span class="field-error">Please enter your last name.</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Email Address <span class="req">*</span></label>
+      <input type="email" name="email" id="email" placeholder="Your best email address" required>
+      <span class="field-error">Please enter a valid email address.</span>
+    </div>
+
+    <div class="field">
+      <label>City &amp; State</label>
+      <input type="text" name="location" placeholder="e.g. Charlotte, NC">
+      <p class="field-hint">Not required — helps Steve understand geographic context.</p>
+    </div>
+
+    <div class="form-nav">
+      <button type="button" class="btn-back btn-back-hidden">Back</button>
+      <button type="button" class="btn-next" onclick="nextSection(1)">Continue</button>
+    </div>
+  </div>
+
+  <!-- ── SECTION 2: Your Work ──────────────────────────────── -->
+  <div class="form-section" id="section-2">
+    <div class="section-header">
+      <span class="section-number">Section 02 of 05</span>
+      <div class="section-title">Your Work</div>
+      <p class="section-desc">Help us understand the context in which you lead.</p>
+    </div>
+
+    <div class="field">
+      <label>Your Title or Role <span class="req">*</span></label>
+      <input type="text" name="role" id="role" placeholder="e.g. Business Owner, VP of Sales, Executive Director..." required>
+      <span class="field-error">Please describe your role.</span>
+    </div>
+
+    <div class="field">
+      <label>Industry or Type of Business <span class="req">*</span></label>
+      <input type="text" name="industry" id="industry" placeholder="e.g. Construction, Financial Services, Nonprofit, Manufacturing..." required>
+      <span class="field-error">Please describe your industry or business type.</span>
+    </div>
+
+    <div class="field">
+      <label>Years in Your Current Role or Business</label>
+      <select name="years_in_role">
+        <option value="" disabled selected>Select a range</option>
+        <option>Less than 2 years</option>
+        <option>2–5 years</option>
+        <option>5–10 years</option>
+        <option>10–20 years</option>
+        <option>More than 20 years</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Size of Your Team or Organization</label>
+      <select name="team_size">
+        <option value="" disabled selected>Select a range</option>
+        <option>Solo / Just me</option>
+        <option>2–5 people</option>
+        <option>6–15 people</option>
+        <option>16–50 people</option>
+        <option>50+ people</option>
+      </select>
+    </div>
+
+    <div class="form-nav">
+      <button type="button" class="btn-back" onclick="prevSection(2)">Back</button>
+      <button type="button" class="btn-next" onclick="nextSection(2)">Continue</button>
+    </div>
+  </div>
+
+  <!-- ── SECTION 3: Challenges & Contribution ─────────────── -->
+  <div class="form-section" id="section-3">
+    <div class="section-header">
+      <span class="section-number">Section 03 of 05</span>
+      <div class="section-title">Challenges &amp; Contribution</div>
+      <p class="section-desc">The Iron Table runs on honesty. These two questions are the heart of the application.</p>
+    </div>
+
+    <div class="field">
+      <label>What season are you in right now — and what is the hard thing you are navigating? <span class="req">*</span></label>
+      <textarea name="current_challenge" id="current_challenge" class="tall"
+        placeholder="Describe the challenge, decision, or season that makes a table like this feel necessary right now. Be specific — not a list of topics, but the actual thing you are working through." required></textarea>
+      <span class="field-error">Please share something about what you are navigating.</span>
+      <p class="field-hint">There are no wrong answers. The more honest, the better the fit assessment.</p>
+    </div>
+
+    <div class="field">
+      <label>What would you bring to others at the table? <span class="req">*</span></label>
+      <textarea name="contribution" id="contribution" class="tall"
+        placeholder="The table sharpens because everyone contributes — not just receives. What experience, perspective, or hard-won wisdom would you bring? What do people tend to come to you for?" required></textarea>
+      <span class="field-error">Please share what you would contribute.</span>
+      <p class="field-hint">This is not about having the right credentials. It is about showing up with something real to offer.</p>
+    </div>
+
+    <div class="form-nav">
+      <button type="button" class="btn-back" onclick="prevSection(3)">Back</button>
+      <button type="button" class="btn-next" onclick="nextSection(3)">Continue</button>
+    </div>
+  </div>
+
+  <!-- ── SECTION 4: Faith & Fit ─────────────────────────────── -->
+  <div class="form-section" id="section-4">
+    <div class="section-header">
+      <span class="section-number">Section 04 of 05</span>
+      <div class="section-title">Faith &amp; Fit</div>
+      <p class="section-desc">The Iron Table is facilitated through a Proverbs-rooted framework. These questions help us understand where you are and whether this is the right table for you.</p>
+    </div>
+
+    <div class="field">
+      <label>How would you describe the role of faith in your work and leadership?</label>
+      <div class="radio-group">
+        <label class="radio-option">
+          <input type="radio" name="faith_integration" value="central">
+          <span>Faith is central — I see my work as a calling and try to integrate it throughout.</span>
+        </label>
+        <label class="radio-option">
+          <input type="radio" name="faith_integration" value="present">
+          <span>Faith is present — it shapes my values, though I don't always use that language at work.</span>
+        </label>
+        <label class="radio-option">
+          <input type="radio" name="faith_integration" value="exploring">
+          <span>I am exploring what faith has to do with leadership — still working that out.</span>
+        </label>
+        <label class="radio-option">
+          <input type="radio" name="faith_integration" value="open">
+          <span>I don't describe myself as a person of faith, but I am open to wisdom-based frameworks.</span>
+        </label>
+      </div>
+      <p class="field-hint">All responses are welcome. The table does not require a particular faith posture — only honesty and openness.</p>
+    </div>
+
+    <div class="field">
+      <label>Have you participated in a peer advisory group, mastermind, or coaching group before?</label>
+      <div class="radio-group">
+        <label class="radio-option">
+          <input type="radio" name="prior_group" value="yes_positive">
+          <span>Yes — and it was genuinely valuable.</span>
+        </label>
+        <label class="radio-option">
+          <input type="radio" name="prior_group" value="yes_mixed">
+          <span>Yes — but the experience was mixed or it wasn't the right fit.</span>
+        </label>
+        <label class="radio-option">
+          <input type="radio" name="prior_group" value="no">
+          <span>No — this would be my first experience with something like this.</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Is there anything else you want Steve to know before he reads your application?</label>
+      <textarea name="additional_context"
+        placeholder="Optional — use this space for anything that doesn't fit neatly into the questions above."></textarea>
+    </div>
+
+    <div class="form-nav">
+      <button type="button" class="btn-back" onclick="prevSection(4)">Back</button>
+      <button type="button" class="btn-next" onclick="nextSection(4)">Continue</button>
+    </div>
+  </div>
+
+  <!-- ── SECTION 5: Availability & Commitment ──────────────── -->
+  <div class="form-section" id="section-5">
+    <div class="section-header">
+      <span class="section-number">Section 05 of 05</span>
+      <div class="section-title">Availability &amp; Commitment</div>
+      <p class="section-desc">The table only works when people show up. Help us understand what consistent participation looks like for you.</p>
+    </div>
+
+    <div class="field">
+      <label>Which meeting formats work best for your schedule? <span class="req">*</span></label>
+      <p class="field-hint" style="margin-bottom:0.6rem;">Select all that apply.</p>
+      <div class="check-group" id="format_group">
+        <label class="check-option">
+          <input type="checkbox" name="format" value="virtual">
+          <span>Virtual (Zoom) — consistent availability regardless of location</span>
+        </label>
+        <label class="check-option">
+          <input type="checkbox" name="format" value="in_person_local">
+          <span>In-person — local to the Piedmont NC / Charlotte region</span>
+        </label>
+        <label class="check-option">
+          <input type="checkbox" name="format" value="either">
+          <span>Either works — I am flexible</span>
+        </label>
+      </div>
+      <span class="field-error" id="format-error" style="display:none;">Please select at least one format.</span>
+    </div>
+
+    <div class="field">
+      <label>What days and times are generally open for you?</label>
+      <input type="text" name="availability"
+        placeholder="e.g. Weekday mornings, Tuesday afternoons, First Friday of the month...">
+      <p class="field-hint">This helps Steve form groups that can actually meet consistently.</p>
+    </div>
+
+    <div class="field">
+      <label>The investment is $100 per month, billed annually. Is that workable? <span class="req">*</span></label>
+      <div class="radio-group">
+        <label class="radio-option">
+          <input type="radio" name="investment_fit" value="yes" id="investment_yes" required>
+          <span>Yes — that works for me.</span>
+        </label>
+        <label class="radio-option">
+          <input type="radio" name="investment_fit" value="question">
+          <span>I have a question about this — I'd like to discuss before committing.</span>
+        </label>
+      </div>
+      <span class="field-error" id="investment-error" style="display:none;">Please select an option.</span>
+    </div>
+
+    <div class="field">
+      <label>On a scale of 1–5, how ready are you to show up consistently and do real work at the table?</label>
+      <select name="readiness">
+        <option value="" disabled selected>Select your honest answer</option>
+        <option value="5">5 — I am ready. This is the right time.</option>
+        <option value="4">4 — I am mostly ready. Some scheduling uncertainty.</option>
+        <option value="3">3 — I am interested but life is complicated right now.</option>
+        <option value="2">2 — Timing may not be right. Worth a conversation.</option>
+        <option value="1">1 — I am exploring, but probably not ready to commit.</option>
+      </select>
+      <p class="field-hint">Honest answers are always the right answers here.</p>
+    </div>
+
+    <div class="form-nav">
+      <button type="button" class="btn-back" onclick="prevSection(5)">Back</button>
+      <button type="submit" class="btn-submit">Submit My Application</button>
+    </div>
+  </div>
+
+</form>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     CONFIRMATION
+══════════════════════════════════════════════════════════ -->
+<div class="confirm-page" id="confirm-page">
+  <div class="confirm-icon">✦</div>
+  <h2>Application<br><em>Received</em></h2>
+  <p>Steve will review your application personally and respond within 3–5 business days. If there is a fit — in terms of the group composition, the timing, and what you bring — you will hear from him directly to schedule a brief conversation.</p>
+  <p>If the timing or fit isn't right, he will tell you that too. Either way, you will hear back.</p>
+  <p class="confirm-verse">"As iron sharpens iron, so a man sharpens the countenance of his friend."</p>
+  <p class="confirm-ref">— Proverbs 27:17</p>
+</div>
+
+<!-- ── Footer ────────────────────────────────────────────────── -->
+<footer>
+  <p>© 2026 Light Based Leadership &nbsp;·&nbsp; <a href="mailto:Steve@LightBasedLeadership.com">Steve@LightBasedLeadership.com</a> &nbsp;·&nbsp; <a href="https://lightbasedleadership.com">lightbasedleadership.com</a></p>
+</footer>
+
+<script>
+  let currentSection = 1;
+  const totalSections = 5;
+
+  // ── Progress indicator update ──────────────────────────────
+  function updateProgress(step) {
+    document.querySelectorAll('.step').forEach(el => {
+      const s = parseInt(el.dataset.step);
+      el.classList.remove('active', 'done');
+      if (s === step) el.classList.add('active');
+      if (s < step)  el.classList.add('done');
+      if (s < step)  el.querySelector('.step-dot').textContent = '✓';
+      else           el.querySelector('.step-dot').textContent = s;
+    });
+  }
+
+  // ── Validation per section ─────────────────────────────────
+  function validateSection(n) {
+    let valid = true;
+
+    if (n === 1) {
+      valid = validateField('first_name') & validateField('last_name') & validateField('email');
+    }
+
+    if (n === 2) {
+      valid = validateField('role') & validateField('industry');
+    }
+
+    if (n === 3) {
+      valid = validateField('current_challenge') & validateField('contribution');
+    }
+
+    if (n === 5) {
+      // checkboxes
+      const checked = document.querySelectorAll('input[name="format"]:checked').length > 0;
+      const formatErr = document.getElementById('format-error');
+      if (!checked) { formatErr.style.display = 'block'; valid = false; }
+      else { formatErr.style.display = 'none'; }
+
+      // investment radio
+      const invPicked = document.querySelector('input[name="investment_fit"]:checked');
+      const invErr = document.getElementById('investment-error');
+      if (!invPicked) { invErr.style.display = 'block'; valid = false; }
+      else { invErr.style.display = 'none'; }
+    }
+
+    return !!valid;
+  }
+
+  function validateField(id) {
+    const el = document.getElementById(id);
+    if (!el) return true;
+    const err = el.parentElement.querySelector('.field-error');
+    if (el.required && !el.value.trim()) {
+      el.classList.add('error');
+      if (err) err.style.display = 'block';
+      return false;
+    }
+    if (el.type === 'email' && el.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value)) {
+      el.classList.add('error');
+      if (err) err.style.display = 'block';
+      return false;
+    }
+    el.classList.remove('error');
+    if (err) err.style.display = 'none';
+    return true;
+  }
+
+  // clear error on input
+  document.querySelectorAll('input, textarea, select').forEach(el => {
+    el.addEventListener('input', () => {
+      el.classList.remove('error');
+      const err = el.parentElement.querySelector('.field-error');
+      if (err) err.style.display = 'none';
+    });
+  });
+
+  // ── Navigation ─────────────────────────────────────────────
+  function nextSection(from) {
+    if (!validateSection(from)) {
+      // scroll to first error
+      const firstErr = document.querySelector('#section-' + from + ' .error, #section-' + from + ' .field-error[style*="block"]');
+      if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    document.getElementById('section-' + from).classList.remove('active');
+    currentSection = from + 1;
+    document.getElementById('section-' + currentSection).classList.add('active');
+    updateProgress(currentSection);
+    window.scrollTo({ top: document.querySelector('.progress-wrap').offsetTop - 20, behavior: 'smooth' });
+  }
+
+  function prevSection(from) {
+    document.getElementById('section-' + from).classList.remove('active');
+    currentSection = from - 1;
+    document.getElementById('section-' + currentSection).classList.add('active');
+    updateProgress(currentSection);
+    window.scrollTo({ top: document.querySelector('.progress-wrap').offsetTop - 20, behavior: 'smooth' });
+  }
+
+  // ── Form submission ─────────────────────────────────────────
+  document.getElementById('application-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    if (!validateSection(5)) return;
+
+    // ── Wire to Systeme.io webhook here ──────────────────────
+    // const data = new FormData(this);
+    // fetch('YOUR_SYSTEME_IO_WEBHOOK_URL', { method: 'POST', body: data });
+    // ─────────────────────────────────────────────────────────
+
+    document.getElementById('form-container').style.display = 'none';
+    document.querySelector('.intro-band').style.display = 'none';
+    document.querySelector('.progress-wrap').style.display = 'none';
+
+    const confirm = document.getElementById('confirm-page');
+    confirm.style.display = 'block';
+    confirm.style.animation = 'fadeUp 0.6s ease forwards';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+
+</body>
+</html>

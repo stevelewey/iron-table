@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Iron Table — A Peer Advisory Group for Marketplace Leaders</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Cinzel:wght@400;500&family=Source+Sans+3:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  /* ── Brand Tokens ─────────────────────────────────────────── */
+  :root {
+    --navy:   #1A1410;
+    --gold:   #C9A84C;
+    --gold-light: #DFC078;
+    --cream:  #FAF6EF;
+    --warm-mid: #EDE5D4;
+    --text:   #2E2820;
+    --muted:  #7A6E62;
+    --rule:   rgba(201,168,76,0.35);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background-color: var(--cream);
+    color: var(--text);
+    font-family: 'Source Sans 3', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── Grain overlay ────────────────────────────────────────── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 999; opacity: 0.6;
+  }
+
+  /* ── Gold rule utility ────────────────────────────────────── */
+  .rule {
+    display: block;
+    width: 60px; height: 1px;
+    background: var(--gold);
+    margin: 0 auto 2rem;
+  }
+  .rule-full {
+    display: block; width: 100%; height: 1px;
+    background: var(--rule);
+    margin: 3rem 0;
+  }
+
+  /* ── Hero ─────────────────────────────────────────────────── */
+  .hero {
+    background-color: var(--navy);
+    color: var(--cream);
+    text-align: center;
+    padding: 6rem 2rem 5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  /* subtle radial glow */
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -40%; left: 50%;
+    transform: translateX(-50%);
+    width: 700px; height: 700px;
+    background: radial-gradient(ellipse, rgba(201,168,76,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.35em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.2s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    font-weight: 500;
+    line-height: 1.1;
+    color: var(--cream);
+    letter-spacing: 0.02em;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.4s forwards;
+  }
+
+  .hero-title em {
+    color: var(--gold);
+    font-style: italic;
+  }
+
+  .hero-scripture {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    color: rgba(250,246,239,0.65);
+    max-width: 480px;
+    margin: 0 auto 0.5rem;
+    line-height: 1.6;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.6s forwards;
+  }
+
+  .hero-ref {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.75s forwards;
+  }
+
+  /* ── Section wrapper ──────────────────────────────────────── */
+  .section {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+  }
+
+  .section-sm {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+  }
+
+  /* ── Section eyebrow ─────────────────────────────────────── */
+  .eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    color: var(--gold);
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  /* ── Headings ─────────────────────────────────────────────── */
+  h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.9rem, 4vw, 2.8rem);
+    font-weight: 500;
+    color: var(--navy);
+    line-height: 1.2;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  h2 em { color: var(--gold); font-style: italic; }
+
+  h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 0.4rem;
+  }
+
+  /* ── Body prose ───────────────────────────────────────────── */
+  p {
+    font-size: 1.05rem;
+    color: var(--text);
+    margin-bottom: 1.2rem;
+    font-weight: 300;
+  }
+
+  p.lead {
+    font-size: 1.15rem;
+    color: var(--muted);
+    text-align: center;
+    max-width: 560px;
+    margin: 0 auto 2rem;
+    line-height: 1.75;
+  }
+
+  p strong { font-weight: 500; color: var(--navy); }
+
+  /* ── Pull quote ───────────────────────────────────────────── */
+  .pull-quote {
+    border-left: 2px solid var(--gold);
+    padding: 0.75rem 1.5rem;
+    margin: 2rem 0;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.25rem;
+    color: var(--navy);
+    line-height: 1.5;
+  }
+
+  /* ── Four pillars grid ────────────────────────────────────── */
+  .pillars {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin: 2.5rem 0;
+  }
+
+  @media (max-width: 560px) { .pillars { grid-template-columns: 1fr; } }
+
+  .pillar {
+    background: white;
+    border: 1px solid rgba(201,168,76,0.2);
+    border-top: 2px solid var(--gold);
+    padding: 1.5rem;
+    position: relative;
+  }
+
+  .pillar-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem;
+    font-weight: 400;
+    color: rgba(201,168,76,0.2);
+    line-height: 1;
+    position: absolute;
+    top: 0.75rem; right: 1rem;
+  }
+
+  .pillar h3 { font-size: 1rem; margin-bottom: 0.3rem; }
+  .pillar p { font-size: 0.93rem; color: var(--muted); margin: 0; line-height: 1.55; }
+
+  /* ── Who this is for / not for ────────────────────────────── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin: 2rem 0;
+  }
+  @media (max-width: 560px) { .two-col { grid-template-columns: 1fr; } }
+
+  .fit-col h3 {
+    font-size: 0.9rem;
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.15em;
+    font-weight: 400;
+    color: var(--gold);
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+  }
+
+  .fit-col ul { list-style: none; }
+  .fit-col ul li {
+    font-size: 0.97rem;
+    color: var(--text);
+    padding: 0.45rem 0;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    padding-left: 1.2rem;
+    position: relative;
+    font-weight: 300;
+    line-height: 1.5;
+  }
+
+  .fit-col ul li::before {
+    content: '—';
+    position: absolute; left: 0;
+    color: var(--gold);
+    font-weight: 400;
+  }
+
+  /* ── Investment band ──────────────────────────────────────── */
+  .investment-band {
+    background: var(--navy);
+    color: var(--cream);
+    text-align: center;
+    padding: 4rem 2rem;
+  }
+
+  .investment-band .eyebrow { color: var(--gold); }
+
+  .investment-band h2 { color: var(--cream); }
+
+  .price-display {
+    margin: 2rem auto;
+    display: inline-block;
+  }
+
+  .price-amount {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 4rem;
+    font-weight: 400;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .price-period {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 0.15em;
+    color: rgba(250,246,239,0.55);
+    text-transform: uppercase;
+    margin-top: 0.3rem;
+  }
+
+  .price-note {
+    font-size: 0.9rem;
+    color: rgba(250,246,239,0.5);
+    max-width: 420px;
+    margin: 0 auto 0;
+    line-height: 1.6;
+  }
+
+  /* ── Form section ─────────────────────────────────────────── */
+  .form-band {
+    background: var(--warm-mid);
+    padding: 5rem 2rem;
+    text-align: center;
+  }
+
+  .form-band h2 { color: var(--navy); margin-bottom: 0.5rem; }
+
+  .form-wrap {
+    max-width: 480px;
+    margin: 2.5rem auto 0;
+  }
+
+  .form-field {
+    margin-bottom: 1rem;
+    text-align: left;
+  }
+
+  .form-field label {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+
+  .form-field input,
+  .form-field select,
+  .form-field textarea {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    border: 1px solid rgba(26,20,16,0.15);
+    border-radius: 0;
+    background: white;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 1rem;
+    font-weight: 300;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s ease;
+    -webkit-appearance: none;
+  }
+
+  .form-field input:focus,
+  .form-field select:focus,
+  .form-field textarea:focus {
+    border-color: var(--gold);
+  }
+
+  .form-field textarea { resize: vertical; min-height: 80px; }
+
+  .form-tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 2rem;
+    border: 1px solid rgba(26,20,16,0.15);
+    overflow: hidden;
+  }
+
+  .form-tab {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    background: white;
+    border: none;
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
+  }
+
+  .form-tab.active {
+    background: var(--navy);
+    color: var(--gold);
+  }
+
+  .form-pane { display: none; }
+  .form-pane.active { display: block; }
+
+  .btn-primary {
+    display: block;
+    width: 100%;
+    padding: 1rem 2rem;
+    background: var(--navy);
+    color: var(--cream);
+    border: none;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+    margin-top: 1.5rem;
+  }
+
+  .btn-primary:hover {
+    background: var(--gold);
+    color: var(--navy);
+  }
+
+  .form-privacy {
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-top: 1rem;
+    line-height: 1.5;
+  }
+
+  /* ── About Steve ──────────────────────────────────────────── */
+  .about-band {
+    border-top: 1px solid var(--rule);
+    padding: 4rem 2rem;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .about-inner {
+    display: flex;
+    gap: 2.5rem;
+    align-items: flex-start;
+  }
+
+  @media (max-width: 560px) {
+    .about-inner { flex-direction: column; }
+    .about-avatar { width: 60px !important; height: 60px !important; min-width: 60px !important; }
+  }
+
+  .about-avatar {
+    width: 80px; height: 80px;
+    min-width: 80px;
+    border-radius: 50%;
+    border: 2px solid var(--gold);
+    background: var(--navy);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    color: var(--gold);
+    font-style: italic;
+  }
+
+  .about-text h3 { font-size: 1.2rem; margin-bottom: 0.25rem; }
+  .about-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 0.75rem;
+  }
+  .about-text p { font-size: 0.97rem; color: var(--muted); margin: 0; }
+
+  /* ── Footer ───────────────────────────────────────────────── */
+  footer {
+    background: var(--navy);
+    padding: 2rem;
+    text-align: center;
+  }
+
+  footer p {
+    font-size: 0.82rem;
+    color: rgba(250,246,239,0.35);
+    margin: 0;
+  }
+
+  footer a {
+    color: var(--gold);
+    text-decoration: none;
+  }
+
+  /* ── Confirmation message ─────────────────────────────────── */
+  .confirm-msg {
+    display: none;
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .confirm-msg .icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .confirm-msg h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    color: var(--navy);
+    margin-bottom: 0.5rem;
+    text-align: center;
+  }
+
+  .confirm-msg p {
+    color: var(--muted);
+    font-size: 0.97rem;
+    max-width: 380px;
+    margin: 0 auto;
+  }
+
+  /* ── Animations ───────────────────────────────────────────── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════
+     HERO
+══════════════════════════════════════════════════════════ -->
+<section class="hero">
+  <p class="hero-eyebrow">Proverbs &amp; Kings</p>
+  <h1 class="hero-title">The <em>Iron</em> Table</h1>
+  <p class="hero-scripture">"As iron sharpens iron, so a man sharpens the countenance of his friend."</p>
+  <p class="hero-ref">— Proverbs 27:17</p>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     OPENING
+══════════════════════════════════════════════════════════ -->
+<div class="section reveal">
+  <span class="eyebrow">The Problem Worth Naming</span>
+  <h2>You Are More Isolated<br><em>Than You Realize</em></h2>
+  <span class="rule"></span>
+
+  <p class="lead">You have employees who depend on you, clients who pay you, and friends who care about you. What you likely do not have is a table of peers who understand your world, share your challenges, and will tell you the truth.</p>
+
+  <p>That isolation is not a character flaw. It is the structural reality of leadership. When you sit at the top of your organization — or carry your business alone — the normal feedback loops disappear. The hard questions go unasked. The blind spots accumulate quietly.</p>
+
+  <div class="pull-quote">
+    "Most marketplace leaders I have worked with have integrity, focus, and work ethic. What they lack is a functioning environment — and that includes the right people around them."
+    <br><br><span style="font-style:normal; font-family:'Cinzel',serif; font-size:0.7rem; letter-spacing:0.15em; color:var(--gold);">— STEVE LEWEY</span>
+  </div>
+
+  <p>The locust has no king — and yet it advances in ranks. It accomplishes together what no individual locust could alone. That is not an accident of nature. It is a principle. And it applies directly to the way marketplace leaders are designed to work.</p>
+</div>
+
+<div style="background:white;">
+<div class="section reveal">
+  <span class="eyebrow">What The Iron Table Is</span>
+  <h2>A Table Built for<br><em>Serious Leaders</em></h2>
+  <span class="rule"></span>
+
+  <p class="lead">The Iron Table is a small, confidential peer advisory group for marketplace leaders — business owners and professionals who are ready to stop navigating hard decisions alone.</p>
+
+  <div class="pillars">
+    <div class="pillar">
+      <span class="pillar-number">01</span>
+      <h3>Small by Design</h3>
+      <p>Limited to 8 members. Enough diversity to sharpen. Small enough for every voice to matter and every challenge to receive real attention.</p>
+    </div>
+    <div class="pillar">
+      <span class="pillar-number">02</span>
+      <h3>Peer-Driven</h3>
+      <p>No guru at the front of the room. Everyone brings something. Everyone leaves stronger. The sharpening is mutual — that is the point.</p>
+    </div>
+    <div class="pillar">
+      <span class="pillar-number">03</span>
+      <h3>Rooted in Wisdom</h3>
+      <p>Facilitated through the Proverbs framework — 30 years of field-tested principles applied to the real challenges you bring to the table.</p>
+    </div>
+    <div class="pillar">
+      <span class="pillar-number">04</span>
+      <h3>Confidential</h3>
+      <p>What is said at the table stays at the table. That trust is the foundation. Without it, there is no real conversation — only performance.</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     WHO IT'S FOR
+══════════════════════════════════════════════════════════ -->
+<div class="section reveal">
+  <span class="eyebrow">Fit Matters</span>
+  <h2>This Table Is<br><em>Not For Everyone</em></h2>
+  <span class="rule"></span>
+
+  <p class="lead">An application is required — not to create barriers, but because fit protects everyone at the table. The quality of the conversation depends on who sits down.</p>
+
+  <div class="two-col">
+    <div class="fit-col">
+      <h3>This Is For You If</h3>
+      <ul>
+        <li>You own a business or carry significant leadership responsibility</li>
+        <li>You are tired of making hard decisions without a trusted sounding board</li>
+        <li>You are ready to be challenged — not just encouraged</li>
+        <li>You value confidentiality and will honor it for others</li>
+        <li>Faith and marketplace life are not separate categories for you</li>
+        <li>You will show up prepared and engaged, not just present</li>
+      </ul>
+    </div>
+    <div class="fit-col">
+      <h3>This Is Not For You If</h3>
+      <ul>
+        <li>You are primarily looking for a networking or referral group</li>
+        <li>You want validation more than honest feedback</li>
+        <li>Consistency is difficult — life makes regular attendance unlikely</li>
+        <li>You are not yet operating with real leadership responsibility</li>
+        <li>You prefer a lecture or curriculum format over peer dialogue</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     INVESTMENT
+══════════════════════════════════════════════════════════ -->
+<div class="investment-band reveal">
+  <span class="eyebrow">Investment</span>
+  <h2>One Conversation Can<br><em>Change Everything</em></h2>
+  <div class="price-display">
+    <div class="price-amount">$100</div>
+    <div class="price-period">Per Month</div>
+  </div>
+  <p class="price-note">Billed annually. One decision made better, one blind spot identified, one costly mistake avoided — the return is not theoretical. It compounds.</p>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     FORM
+══════════════════════════════════════════════════════════ -->
+<div class="form-band" id="join">
+  <span class="eyebrow">Secure Your Spot</span>
+  <h2>Two Ways to<br><em>Take the Next Step</em></h2>
+  <span class="rule"></span>
+  <p style="color:var(--muted); max-width:480px; margin:0 auto 1.5rem; font-size:0.97rem;">Hold your place on the waitlist, or go straight to the full application. Both matter — the waitlist keeps you in view when a group forms; the application begins the real conversation.</p>
+
+  <div class="form-wrap">
+    <div class="form-tabs">
+      <button class="form-tab active" onclick="switchTab('waitlist', this)">Join Waitlist</button>
+      <button class="form-tab" onclick="switchTab('apply', this)">Apply Now</button>
+    </div>
+
+    <!-- WAITLIST PANE -->
+    <div class="form-pane active" id="pane-waitlist">
+      <form id="waitlist-form" onsubmit="handleSubmit(event, 'waitlist')">
+        <div class="form-field">
+          <label>First Name</label>
+          <input type="text" name="first_name" placeholder="Your first name" required>
+        </div>
+        <div class="form-field">
+          <label>Last Name</label>
+          <input type="text" name="last_name" placeholder="Your last name" required>
+        </div>
+        <div class="form-field">
+          <label>Email Address</label>
+          <input type="email" name="email" placeholder="Your best email" required>
+        </div>
+        <div class="form-field">
+          <label>Your Role or Business</label>
+          <input type="text" name="role" placeholder="e.g. Business Owner, Sales Director...">
+        </div>
+        <button type="submit" class="btn-primary">Hold My Spot</button>
+        <p class="form-privacy">Your information is never shared or sold. You will receive a brief note confirming your place on the waitlist — nothing more until a group is forming.</p>
+      </form>
+      <div class="confirm-msg" id="confirm-waitlist">
+        <div class="icon">✦</div>
+        <h3>You're on the List</h3>
+        <p>You will hear from Steve personally when the next group is forming. Keep doing the work in the meantime.</p>
+      </div>
+    </div>
+
+    <!-- APPLY PANE — bridges to the full standalone application page -->
+    <div class="form-pane" id="pane-apply">
+      <div style="text-align:left; padding: 0.5rem 0 0.25rem;">
+        <p style="font-size:0.97rem; color:var(--muted); margin-bottom:1rem; line-height:1.7;">
+          The full application takes about 8–10 minutes. Steve reviews every one personally
+          and responds within 3–5 business days. There are no trick questions — just an honest
+          conversation on paper before the real one.
+        </p>
+        <p style="font-size:0.97rem; color:var(--muted); margin-bottom:1.5rem; line-height:1.7;">
+          If it's a fit, you'll hear from Steve directly to schedule a brief call. If the
+          timing or group composition isn't right, he'll tell you that too.
+        </p>
+        <a href="iron_table_application.html" class="btn-primary"
+           style="display:block; text-align:center; text-decoration:none; padding:1rem 2rem;">
+          Begin My Application
+        </a>
+        <p class="form-privacy" style="margin-top:1rem;">
+          Applications are reviewed personally by Steve.
+          Your information is never shared or sold.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     ABOUT STEVE
+══════════════════════════════════════════════════════════ -->
+<div class="about-band reveal">
+  <div class="about-inner">
+    <div class="about-avatar">SL</div>
+    <div class="about-text">
+      <h3>Steve Lewey</h3>
+      <span class="about-title">Marketplace Chaplain &nbsp;·&nbsp; Maxwell Leadership Founding Partner &nbsp;·&nbsp; CBMC Trusted Advisors Facilitator</span>
+      <p>Steve has spent 30 years studying the Book of Proverbs monthly and applying its principles to the challenges of marketplace leadership. He founded Light Based Leadership and the Proverbs &amp; Kings ecosystem to serve business owners and marketplace leaders who want wisdom — not just strategy — at the center of how they lead.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════════════════════ -->
+<footer>
+  <p>© 2026 Light Based Leadership &nbsp;·&nbsp; <a href="mailto:Steve@LightBasedLeadership.com">Steve@LightBasedLeadership.com</a> &nbsp;·&nbsp; <a href="https://lightbasedleadership.com">lightbasedleadership.com</a></p>
+</footer>
+
+<script>
+  // ── Tab switching ────────────────────────────────────────────
+  function switchTab(tab, btn) {
+    document.querySelectorAll('.form-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.form-pane').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('pane-' + tab).classList.add('active');
+  }
+
+  // ── Form submission (UI only — wire to Systeme.io endpoint) ──
+  function handleSubmit(e, type) {
+    e.preventDefault();
+    const form = e.target;
+    const confirm = document.getElementById('confirm-' + type);
+    form.style.display = 'none';
+    confirm.style.display = 'block';
+    // TODO: Replace with your Systeme.io form webhook or embed
+    // fetch('YOUR_SYSTEME_IO_WEBHOOK_URL', {
+    //   method: 'POST',
+    //   body: new FormData(form)
+    // });
+  }
+
+  // ── Scroll reveal ────────────────────────────────────────────
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
